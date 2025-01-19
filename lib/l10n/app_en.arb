@@ -1,0 +1,19 @@
+{
+  "@@locale": "en",
+  "screenTitle": "Dynamics",
+  "@screenTitle": {
+    "description": "Screen title"
+  },
+  "screenSubtitle": "All Period",
+  "@screenSubtitle": {
+    "description": "Screen subtitle"
+  },
+  "oldMarkersMessage": "Biomarkers were submitted a long time ago and indicate illness.",
+  "@oldMarkersMessage": {
+    "description": "Old biomarkers message"
+  },
+  "resubmitButtonText": "Resubmit the markers",
+  "@resubmitButtonText": {
+    "description": "Resubmit button text"
+  }
+}

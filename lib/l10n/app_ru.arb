@@ -1,0 +1,19 @@
+{
+  "@@locale": "ru",
+  "screenTitle": "Динамика",
+  "@screenTitle": {
+    "description": "Заголовок экрана динамики"
+  },
+  "screenSubtitle": "За все время",
+  "@screenSubtitle": {
+    "description": "Подзаголовок экрана динамики"
+  },
+  "oldMarkersMessage": "Биомаркеры были отправлены давно и указывают на болезнь.",
+  "@oldMarkersMessage": {
+    "description": "Сообщение о старых биомаркерах"
+  },
+  "resubmitButtonText": "Отправить маркеры повторно",
+  "@resubmitButtonText": {
+    "description": "Текст кнопки повторной отправки"
+  }
+}
