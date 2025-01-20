@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health_dynamics/core/di/injection_container.dart';
-import 'package:health_dynamics/features/dynamics/presentation/bloc/dynamics_bloc.dart';
-import 'package:health_dynamics/features/dynamics/presentation/bloc/dynamics_event.dart';
-import 'package:health_dynamics/features/dynamics/presentation/bloc/dynamics_state.dart';
+import 'package:health_dynamics/core/ui_components/app_icons.dart';
+import 'package:health_dynamics/core/ui_components/app_sizes.dart';
+import 'package:health_dynamics/core/ui_components/app_spacing.dart';
+import 'package:health_dynamics/core/ui_components/app_strings.dart';
+import 'package:health_dynamics/core/ui_components/app_text.dart';
+import 'package:health_dynamics/core/usecase/no_params.dart';
+import 'package:health_dynamics/features/dynamics/domain/usecases/get_dynamics_usecase.dart';
 import 'package:health_dynamics/features/dynamics/presentation/widgets/dynamics_chart.dart';
 import 'package:health_dynamics/features/dynamics/presentation/widgets/dynamics_list.dart';
-import 'package:health_dynamics/features/dynamics/presentation/widgets/old_markers_warning.dart';
+import 'package:health_dynamics/features/warnings/presentation/widgets/old_markers_warning.dart';
 
 class DynamicsScreen extends StatefulWidget {
   const DynamicsScreen({super.key});
@@ -16,80 +19,60 @@ class DynamicsScreen extends StatefulWidget {
 }
 
 class _DynamicsScreenState extends State<DynamicsScreen> {
-  late final DynamicsBloc _dynamicsBloc;
-
-  @override
-  void initState() {
-    super.initState();
-    _dynamicsBloc = sl<DynamicsBloc>();
-    _dynamicsBloc.add(const DynamicsEvent.started());
-  }
-
-  @override
-  void dispose() {
-    _dynamicsBloc.close();
-    super.dispose();
-  }
+  final _getWarningsUseCase = sl<GetDynamicsUseCase>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(AppIcons.back),
           onPressed: () => Navigator.pop(context),
         ),
         title: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Dynamics',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              'All Period',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
-              ),
-            ),
+            AppText.header(AppStrings.dynamicsTitle),
+            AppText.subheader(AppStrings.dynamicsSubtitle),
           ],
         ),
       ),
-      body: BlocBuilder<DynamicsBloc, DynamicsState>(
-        bloc: _dynamicsBloc,
-        builder: (context, state) {
-          return RefreshIndicator(
-            onRefresh: () async {
-              _dynamicsBloc.add(const DynamicsEvent.refreshRequested());
-            },
-            child: state.when(
-              initial: () => const SizedBox(),
-              loading: () => const Center(child: CircularProgressIndicator()),
-              loaded: (dynamics) => CustomScrollView(
+      body: FutureBuilder(
+        future: _getWarningsUseCase(const NoParams()),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          return snapshot.data!.fold(
+            (failure) => Center(
+              child: AppText.body(failure.message),
+            ),
+            (dynamics) => RefreshIndicator(
+              onRefresh: () async {
+                setState(() {});
+              },
+              child: CustomScrollView(
                 slivers: <Widget>[
                   SliverToBoxAdapter(
                     child: Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: AppSpacing.all,
                       child: DynamicsChart(dynamics: dynamics),
                     ),
                   ),
-                  if (dynamics.any((d) => d.date.isBefore(
-                      DateTime.now().subtract(const Duration(days: 180)))))
+                  if (dynamics.any((d) => d.date.isBefore(DateTime.now()
+                      .subtract(const Duration(
+                          days: AppSizes.oldMarkersDayThreshold)))))
                     SliverToBoxAdapter(
                       child: OldMarkersWarning(
                         onResubmit: () {
-                          // TODO: имплементировать  ресабмит
+                          // TODO: Implement resubmit action
                         },
                       ),
                     ),
                   DynamicsList(dynamics: dynamics),
                 ],
               ),
-              error: (message) => Center(child: Text(message)),
             ),
           );
         },

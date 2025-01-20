@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-
+import 'package:health_dynamics/core/ui_components/app_colors.dart';
+import 'package:health_dynamics/core/ui_components/app_sizes.dart';
+import 'package:health_dynamics/core/ui_components/app_spacing.dart';
 import 'package:health_dynamics/core/ui_components/app_text.dart';
 import 'package:health_dynamics/core/ui_components/app_theme.dart';
+import 'package:health_dynamics/core/utils/app_utils.dart';
 import 'package:health_dynamics/core/utils/date_formatter.dart';
 import 'package:health_dynamics/features/dynamics/domain/entities/dynamics_entity.dart';
 
@@ -18,37 +21,37 @@ class DynamicsListItem extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: AppTheme.listItemPadding,
+          padding: AppSpacing.all,
           child: Row(
             children: [
               Expanded(
-                flex: 2,
+                flex: AppSizes.dateColumnFlex,
                 child: AppText.value(
                   DateFormatter.formatMonthDay(dynamics.date),
-                  color: Colors.black,
+                  color: AppColors.textPrimary,
                 ),
               ),
               Expanded(
-                flex: 3,
+                flex: AppSizes.labColumnFlex,
                 child: AppText.subheader(
                   dynamics.laboratory,
                 ),
               ),
               Expanded(
                 child: AppText.value(
-                  dynamics.value.toStringAsFixed(1),
+                  AppUtils.formatDecimal(dynamics.value),
                   textAlign: TextAlign.right,
                   color: dynamics.value >= AppTheme.valueThreshold
-                      ? AppTheme.positiveColor
-                      : AppTheme.warningColor,
+                      ? AppColors.positiveColor
+                      : AppColors.warningColor,
                 ),
               ),
             ],
           ),
         ),
         const Divider(
-          height: 1,
-          color: AppTheme.dividerColor,
+          height: AppSizes.dividerHeight,
+          color: AppColors.dividerColor,
         ),
       ],
     );

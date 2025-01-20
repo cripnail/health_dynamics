@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:health_dynamics/core/ui_components/app_sizes.dart';
+import 'package:health_dynamics/core/ui_components/app_spacing.dart';
 
 class AppButton extends StatelessWidget {
   final String text;
@@ -17,8 +19,8 @@ class AppButton extends StatelessWidget {
     return TextButton(
       onPressed: onPressed,
       style: TextButton.styleFrom(
-        padding: EdgeInsets.zero,
-        minimumSize: const Size(0, 0),
+        padding: AppSpacing.none,
+        minimumSize: AppSizes.buttonMinSize,
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         alignment: Alignment.centerLeft,
       ),
@@ -26,8 +28,8 @@ class AppButton extends StatelessWidget {
         text,
         style: TextStyle(
           color: textColor,
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
+          fontSize: AppSizes.buttonFontSize,
+          fontWeight: AppSizes.fontWeightMedium,
         ),
       ),
     );

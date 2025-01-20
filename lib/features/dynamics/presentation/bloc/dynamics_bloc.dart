@@ -2,8 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health_dynamics/core/usecase/no_params.dart';
 import 'package:health_dynamics/features/dynamics/domain/usecases/get_dynamics_usecase.dart';
-import 'package:health_dynamics/features/dynamics/presentation/bloc/dynamics_event.dart';
-import 'package:health_dynamics/features/dynamics/presentation/bloc/dynamics_state.dart';
+import 'package:health_dynamics/features/dynamics/presentation/bloc/events/dynamics_event_class.dart';
+import 'package:health_dynamics/features/dynamics/presentation/bloc/states/dynamics_state_class.dart';
 
 class DynamicsBloc extends Bloc<DynamicsEvent, DynamicsState> {
   final GetDynamicsUseCase _getDynamicsUseCase;

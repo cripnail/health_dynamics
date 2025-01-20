@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:health_dynamics/core/ui_components/app_sizes.dart';
 
 class AppText extends StatelessWidget {
   final String text;
@@ -10,7 +11,7 @@ class AppText extends StatelessWidget {
     super.key,
     this.textAlign,
   }) : style = const TextStyle(
-          fontSize: 24,
+          fontSize: AppSizes.headerFontSize,
           fontWeight: FontWeight.bold,
         );
 
@@ -19,7 +20,7 @@ class AppText extends StatelessWidget {
     super.key,
     this.textAlign,
   }) : style = const TextStyle(
-          fontSize: 16,
+          fontSize: AppSizes.subheaderFontSize,
           color: Colors.grey,
         );
 
@@ -28,7 +29,7 @@ class AppText extends StatelessWidget {
     super.key,
     this.textAlign,
   }) : style = const TextStyle(
-          fontSize: 14,
+          fontSize: AppSizes.bodyFontSize,
           color: Colors.black54,
         );
 
@@ -38,7 +39,7 @@ class AppText extends StatelessWidget {
     this.textAlign,
     required Color color,
   }) : style = TextStyle(
-          fontSize: 18,
+          fontSize: AppSizes.valueFontSize,
           fontWeight: FontWeight.bold,
           color: color,
         );

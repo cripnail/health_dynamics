@@ -2,6 +2,8 @@ import 'dart:math' show min, max;
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:health_dynamics/core/ui_components/app_sizes.dart';
+import 'package:health_dynamics/core/ui_components/app_spacing.dart';
 import 'package:health_dynamics/core/ui_components/app_theme.dart';
 import 'package:health_dynamics/core/utils/date_formatter.dart';
 import 'package:health_dynamics/features/dynamics/domain/entities/dynamics_entity.dart';
@@ -25,21 +27,23 @@ class DynamicsChart extends StatelessWidget {
 
     final minY = dynamics.isEmpty
         ? 0.0
-        : (dynamics.map((e) => e.value).reduce(min) - 0.5)
+        : (dynamics.map((e) => e.value).reduce(min) -
+                AppSizes.chartValuePadding)
             .clamp(0.0, double.infinity);
 
-    final maxY =
-        dynamics.isEmpty ? 5.0 : dynamics.map((e) => e.value).reduce(max) + 0.5;
+    final maxY = dynamics.isEmpty
+        ? AppSizes.chartDefaultMaxValue
+        : dynamics.map((e) => e.value).reduce(max) + AppSizes.chartValuePadding;
 
     return AspectRatio(
-      aspectRatio: AppTheme.chartAspectRatio,
+      aspectRatio: AppSizes.chartAspectRatio,
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppSizes.chartCornerRadius),
         ),
         child: Padding(
-          padding: AppTheme.defaultPadding,
+          padding: AppSpacing.all,
           child: LineChart(
             LineChartData(
               gridData: const FlGridData(show: false),
@@ -56,7 +60,7 @@ class DynamicsChart extends StatelessWidget {
                 bottomTitles: AxisTitles(
                   sideTitles: SideTitles(
                     showTitles: true,
-                    reservedSize: 30,
+                    reservedSize: AppSpacing.all.bottom,
                     interval: 1,
                     getTitlesWidget: (value, meta) {
                       if (value.toInt() >= sortedDynamics.length ||
@@ -65,10 +69,12 @@ class DynamicsChart extends StatelessWidget {
                       }
                       final date = sortedDynamics[value.toInt()].date;
                       return Transform.translate(
-                        offset: const Offset(0, 10),
+                        offset:
+                            const Offset(0, AppSizes.chartBottomTitleOffset),
                         child: Text(
                           DateFormatter.formatChartDate(date),
-                          style: AppTheme.subtitleStyle.copyWith(fontSize: 12),
+                          style: AppTheme.subtitleStyle
+                              .copyWith(fontSize: AppSizes.chartTitlesFontSize),
                         ),
                       );
                     },
@@ -90,27 +96,27 @@ class DynamicsChart extends StatelessWidget {
                     ),
                   ),
                   isCurved: true,
-                  curveSmoothness: AppTheme.chartCurveSmoothness,
+                  curveSmoothness: AppSizes.chartCurveSmoothness,
                   color: AppTheme.positiveColor,
-                  barWidth: AppTheme.chartLineWidth,
+                  barWidth: AppSizes.chartLineWidth,
                   isStrokeCapRound: true,
                   dotData: FlDotData(
                     show: true,
                     getDotPainter: (spot, percent, barData, index) {
                       final value = sortedDynamics[index].value;
                       return FlDotCirclePainter(
-                        radius: AppTheme.chartDotRadius,
+                        radius: AppSizes.chartDotRadius,
                         color: value >= AppTheme.valueThreshold
                             ? AppTheme.positiveColor
                             : AppTheme.warningColor,
-                        strokeWidth: AppTheme.chartLineWidth,
+                        strokeWidth: AppSizes.chartLineWidth,
                         strokeColor: Colors.white,
                       );
                     },
                   ),
                   belowBarData: BarAreaData(
                     show: true,
-                    gradient: LinearGradient(
+                    gradient: const LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
@@ -126,10 +132,10 @@ class DynamicsChart extends StatelessWidget {
                 touchTooltipData: LineTouchTooltipData(
                   fitInsideHorizontally: true,
                   fitInsideVertically: true,
-                  tooltipPadding: const EdgeInsets.all(8),
-                  tooltipRoundedRadius: 8,
+                  tooltipPadding: AppSpacing.all,
+                  tooltipRoundedRadius: AppSizes.chartCornerRadius,
                   tooltipBorder: BorderSide(color: Colors.grey[300]!),
-                  tooltipMargin: 8,
+                  tooltipMargin: AppSizes.smallSpacing,
                   getTooltipItems: (touchedSpots) {
                     return touchedSpots.map((spot) {
                       final date = sortedDynamics[spot.x.toInt()].date;

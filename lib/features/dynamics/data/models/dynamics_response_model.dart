@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 
-import 'package:health_dynamics/features/dynamics/data/models/alert_model.dart';
 import 'package:health_dynamics/features/dynamics/data/models/dynamics_model.dart';
+import 'package:health_dynamics/features/warnings/data/models/alert_model.dart';
 
 class DynamicsResponseModel {
   final List<DynamicsModel> items;
